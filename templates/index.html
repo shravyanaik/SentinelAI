@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c2d">
+  <title>SentinelAI — Agent Safety Console</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 3 27 7v8c0 7-4.7 11.4-11 14C9.7 26.4 5 22 5 15V7l11-4Z"/><path d="m11 16 3.2 3.2L21.5 12"/></svg></div>
+        <div><div class="brand-name">Sentinel<span>AI</span></div><div class="brand-sub">AGENT SAFETY PLATFORM</div></div>
+      </div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-item active" href="#dashboard"><span class="nav-icon">▦</span> Overview</a>
+        <a class="nav-item" href="#simulator"><span class="nav-icon">⌁</span> Action simulator</a>
+        <a class="nav-item" href="#policies"><span class="nav-icon">◇</span> Policy checks</a>
+        <a class="nav-item" href="#audit"><span class="nav-icon">≡</span> Audit logs</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="shield-mini">✓</div>
+        <div><strong>Safety layer active</strong><small>Local policy engine</small></div>
+        <span class="live-dot"></span>
+      </div>
+      <div class="sidebar-footer">HACKATHON PROTOTYPE <span>v0.1.0</span></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="mobile-brand"><div class="brand-mark small"><svg viewBox="0 0 32 32"><path d="M16 3 27 7v8c0 7-4.7 11.4-11 14C9.7 26.4 5 22 5 15V7l11-4Z"/><path d="m11 16 3.2 3.2L21.5 12"/></svg></div> Sentinel<span>AI</span></div>
+        <div class="breadcrumb">Workspace <span>/</span> <strong>Agent Safety Console</strong></div>
+        <div class="topbar-right"><span class="simulation-pill"><span></span> SIMULATION MODE</span><div class="avatar">SA</div></div>
+      </header>
+
+      <section class="page-intro" id="dashboard">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-line"></span> PS 2.1 · AI AGENT SAFETY AND CONTROL</div>
+          <h1>Agent Safety Console</h1>
+          <p>Evaluate proposed agent actions before they reach connected tools.</p>
+        </div>
+        <div class="system-status"><span class="status-check">✓</span><div><strong>Policy engine online</strong><small id="backend-status">Checking local backend…</small></div></div>
+      </section>
+
+      <section class="stats-grid" aria-label="Decision statistics">
+        <article class="stat-card">
+          <div class="stat-top"><span>Total decisions</span><span class="stat-icon total-icon">↗</span></div>
+          <div class="stat-value" id="total-count">0</div><div class="stat-foot"><span class="neutral-dot"></span> This session</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Allowed actions</span><span class="stat-icon allow-icon">✓</span></div>
+          <div class="stat-value" id="allow-count">0</div><div class="stat-foot green-text"><span class="tiny-dot green-bg"></span> Passed policy checks</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Blocked actions</span><span class="stat-icon block-icon">⊘</span></div>
+          <div class="stat-value" id="block-count">0</div><div class="stat-foot red-text"><span class="tiny-dot red-bg"></span> Stopped by policy</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Human review</span><span class="stat-icon review-icon">◷</span></div>
+          <div class="stat-value" id="review-count">0</div><div class="stat-foot amber-text"><span class="tiny-dot amber-bg"></span> Awaiting approval</div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel simulator-panel" id="simulator">
+          <div class="panel-heading">
+            <div><div class="section-kicker">LIVE POLICY EVALUATION</div><h2>Action simulator</h2><p>Submit a proposed action to see how the policy engine responds.</p></div>
+            <span class="step-chip">01 <span>/</span> 02</span>
+          </div>
+          <div class="scenario-label">QUICK SCENARIOS <span>Choose a case to auto-fill the form</span></div>
+          <div class="scenario-grid">
+            <button type="button" class="scenario safe" data-scenario="safe"><span class="scenario-symbol">✓</span><span><strong>Safe action</strong><small>Public information</small></span><span class="scenario-arrow">↗</span></button>
+            <button type="button" class="scenario danger" data-scenario="sensitive"><span class="scenario-symbol">⊘</span><span><strong>Sensitive data</strong><small>Unapproved destination</small></span><span class="scenario-arrow">↗</span></button>
+            <button type="button" class="scenario caution" data-scenario="impact"><span class="scenario-symbol">⚑</span><span><strong>High-impact action</strong><small>Needs human review</small></span><span class="scenario-arrow">↗</span></button>
+          </div>
+
+          <form id="action-form">
+            <div class="form-grid">
+              <label class="field full"><span>Proposed action <b>*</b></span><input id="action" name="action" maxlength="240" required value="Read public weather data" placeholder="e.g. Read public weather data"></label>
+              <label class="field full"><span>Resource or data involved <b>*</b></span><input id="resource" name="resource" maxlength="240" required value="Public weather API" placeholder="e.g. Customer records"></label>
+              <label class="field"><span>Data sensitivity <b>*</b></span><select id="sensitivity" name="sensitivity" required><option>Public</option><option>Internal</option><option>Confidential</option><option>Customer data</option></select></label>
+              <label class="field"><span>Destination or tool <b>*</b></span><input id="destination" name="destination" maxlength="240" required value="public_weather_api" placeholder="e.g. approved_internal_system"></label>
+            </div>
+            <div class="form-actions"><p><span class="required-star">*</span> All fields are required</p><button class="primary-button" type="submit" id="evaluate-button"><span>Evaluate action</span><span class="button-arrow">→</span></button></div>
+          </form>
+
+          <div class="result-box empty" id="result-box" aria-live="polite">
+            <div class="result-symbol" id="result-symbol">⌁</div>
+            <div class="result-copy"><div class="result-overline" id="result-overline">READY TO EVALUATE</div><h3 id="result-title">Awaiting proposed action</h3><p id="result-reason">Choose a quick scenario or enter your own details, then evaluate the action.</p><div class="result-meta" id="result-meta">No action executed · Simulation only</div></div>
+          </div>
+        </article>
+
+        <aside class="right-column">
+          <article class="panel flow-panel">
+            <div class="panel-heading compact"><div><div class="section-kicker">HOW IT WORKS</div><h2>Safety pipeline</h2></div><span class="pipeline-tag">3 steps</span></div>
+            <div class="pipeline">
+              <div class="pipeline-step"><div class="pipeline-icon input-icon">↘</div><div><strong>1. Proposed action</strong><p>An agent requests access to a tool or resource.</p></div></div>
+              <div class="pipeline-connector"></div>
+              <div class="pipeline-step"><div class="pipeline-icon policy-icon">◇</div><div><strong>2. Policy evaluation</strong><p>Rules inspect sensitivity, destination and impact.</p></div></div>
+              <div class="pipeline-connector"></div>
+              <div class="pipeline-step"><div class="pipeline-icon outcome-icon">✓</div><div><strong>3. Safety decision</strong><p>Allow, block, or request human approval.</p></div></div>
+            </div>
+            <div class="pipeline-note"><span>ⓘ</span> This prototype evaluates requests only. It never executes external actions.</div>
+          </article>
+
+          <article class="panel policy-panel" id="policies">
+            <div class="panel-heading compact"><div><div class="section-kicker">ACTIVE RULESET</div><h2>Policy checks</h2></div><span class="rules-count">03 RULES</span></div>
+            <div class="policy-list">
+              <div class="policy-row"><div class="policy-symbol protect">◈</div><div><strong>Sensitive data protection</strong><p>Confidential data to an unapproved destination is blocked. Other sensitive sharing needs review.</p></div><span class="policy-state">ACTIVE</span></div>
+              <div class="policy-row"><div class="policy-symbol impact">⚑</div><div><strong>High-impact action review</strong><p>Deleting records, changing permissions or transferring funds requires human approval.</p></div><span class="policy-state">ACTIVE</span></div>
+              <div class="policy-row"><div class="policy-symbol verify">◎</div><div><strong>Destination verification</strong><p>Unknown or unapproved destinations trigger additional checks.</p></div><span class="policy-state">ACTIVE</span></div>
+            </div>
+          </article>
+        </aside>
+      </section>
+
+      <section class="panel audit-panel" id="audit">
+        <div class="panel-heading audit-heading">
+          <div><div class="section-kicker">TRACEABILITY</div><h2>Audit log <span class="live-count" id="audit-total">0</span></h2><p>Every evaluation is recorded for this running demo session.</p></div>
+          <button type="button" class="secondary-button" id="refresh-logs"><span>↻</span> Refresh logs</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>TIME</th><th>PROPOSED ACTION</th><th>RESOURCE</th><th>DECISION</th><th>REASON</th></tr></thead><tbody id="audit-body"><tr class="empty-row"><td colspan="5"><div class="empty-audit"><span>≡</span><strong>No evaluations yet</strong><small>Run an action in the simulator to create your first audit entry.</small></div></td></tr></tbody></table>
+        </div>
+        <div class="audit-footer"><span><span class="tiny-dot green-bg"></span> Audit logging active</span><span>Latest 100 entries · In-memory demo log</span></div>
+      </section>
+      <footer class="page-footer"><span>SentinelAI <span class="footer-sep">·</span> AI Agent Safety &amp; Control</span><span><span class="footer-shield">✓</span> Built for responsible agent workflows</span></footer>
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
