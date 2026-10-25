@@ -1,5 +1,11 @@
 # SentinelAI — Agent Safety Console
 
+### 🚀 Live Demo
+Try SentinelAI here: https://sentinelai-demo1.onrender.com
+
+Note: This is a demonstration project. Actions are simulated and should not be treated as a production security system.
+
+
 **Problem statement:** PS 2.1 — AI Agent Safety and Control
 
 SentinelAI is a beginner-friendly hackathon prototype that demonstrates a safety layer between a hypothetical AI agent and the tools it might request. It evaluates proposed actions and returns one of three decisions: **ALLOW**, **BLOCK**, or **REQUIRE HUMAN APPROVAL**.
